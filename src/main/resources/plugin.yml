@@ -5,12 +5,19 @@ api-version: 1.18
 authors: [ Ryan_Tang ]
 description: A Spigot plugin that connect discord bot with minecraft
 commands:
-  token:
-    description: set the bot's token
+  discord:
+    description: discord
     usage: /<command>
-  dcchannel:
-    description: set the channel id
-    usage: /<command>
-  activitytext:
-    description: set the activity text
-    usage: /<command>
+  reply:
+    description: reply to message
+    usage: /<command> <messageid> <content>
+
+#  discord token:
+#    description: set the bot's token
+#    usage: /<command> <token>
+#  discord channel:
+#    description: set the channel id
+#    usage: /<command> <channelId>
+#  discord activitytext:
+#    description: set the activity text
+#    usage: /<command> <text>
