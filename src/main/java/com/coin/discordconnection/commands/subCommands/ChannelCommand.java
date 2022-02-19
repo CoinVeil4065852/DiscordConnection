@@ -30,7 +30,7 @@ public class ChannelCommand extends SubCommand {
         }
 
         Config.getInstance().setChannelId(args[0]);
-        sender.sendMessage(ChatColor.GREEN + "[DiscordPlugin]channel had been set to "+textChannel.getGuild()+"/"+textChannel.getName() );
+        sender.sendMessage(ChatColor.GREEN + "channel had been set to "+textChannel.getGuild()+"/"+textChannel.getName() );
     }
 
     @Override

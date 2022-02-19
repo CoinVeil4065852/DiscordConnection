@@ -21,10 +21,10 @@ public class TokenCommand extends SubCommand {
         }
         try {
             DiscordConnection.startJDA(args[0]);
-            sender.sendMessage(ChatColor.GREEN + "[DiscordPlugin]:token had been set, use /dcchannel [channelId] to set channel");
+            sender.sendMessage(ChatColor.GREEN + "token had been set, use /dcchannel [channelId] to set channel");
             Config.getInstance().setToken(args[0]);
         } catch (LoginException e) {
-            sender.sendMessage(ChatColor.RED + "[DiscordPlugin]:token incorrect");
+            sender.sendMessage(ChatColor.RED + "token incorrect");
         }
     }
 

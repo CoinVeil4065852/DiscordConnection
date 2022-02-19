@@ -40,7 +40,7 @@ public class ReplyCommand implements CommandExecutor {
             String replyId = message.getId();
             TextComponent textComponent = new TextComponent();
             textComponent.setText("<" + sender.getName() + "> " + args[1]);
-            textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("Reply")));
+            textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("Click to Reply")));
             textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/reply " + replyId + " "));
 
             Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GRAY + " ➡ Replied " + Helper.messageToText(messageToReply,ChatColor.GRAY));

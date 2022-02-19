@@ -12,6 +12,7 @@ public class Config {
     private String channelId;
     private String token;
     private String activityText ="server is opening";
+    private String deathCountText ="Deaths";
 
     private static Config instance;
 
@@ -41,6 +42,15 @@ public class Config {
 
     public void setChannelId(String channelId) {
         this.channelId = channelId;
+        saveConfig();
+    }
+
+    public String getDeathCountText() {
+        return deathCountText;
+    }
+
+    public void setDeathCountText(String deathCountText) {
+        this.deathCountText = deathCountText;
         saveConfig();
     }
 

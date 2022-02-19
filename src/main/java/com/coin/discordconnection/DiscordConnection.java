@@ -37,7 +37,6 @@ public class DiscordConnection extends JavaPlugin {
     public static JDA jda;
     public static final File DEATH_COUNT = new File("./plugins/discordPluginDeathCount.txt");
     public static Map<String, Integer> deathCount = new HashMap();
-    public static final String DEFAULT_ACTIVITY_TEXT = "Server Opening";
 
     @Override
     public void onEnable() {
@@ -172,7 +171,7 @@ class BukkitEvents implements Listener {
         int death = DiscordConnection.deathCount.getOrDefault(name, 0);
         DiscordConnection.deathCount.put(name, death + 1);
         DiscordConnection.saveDeathCount();
-        event.setDeathMessage(event.getDeathMessage()+"\n死亡累計:"+ChatColor.RED + (death + 1));
+        event.setDeathMessage(event.getDeathMessage()+"\n"+Config.getInstance().getDeathCountText()+":"+ChatColor.RED + (death + 1));
 
         if(DiscordConnection.jda==null)return;
         String channelID = Config.getInstance().getChannelId();
@@ -181,7 +180,7 @@ class BukkitEvents implements Listener {
         if (textChannel == null) return;
         EmbedBuilder builder = new EmbedBuilder();
 
-        builder.setTitle("*" + event.getDeathMessage() + "*\n死亡累計:" + (death + 1)).setColor(Color.RED);
+        builder.setTitle("*" + event.getDeathMessage() + "*\n"+Config.getInstance().getDeathCountText()+":" + (death + 1)).setColor(Color.RED);
 
         textChannel.sendMessageEmbeds(builder.build()).queue();
     }
@@ -193,9 +192,7 @@ class BukkitEvents implements Listener {
 
     @EventHandler
     public static void onPlayerQuit(PlayerQuitEvent event) {
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DiscordConnection.plugin, () -> DiscordConnection.setActivity());
-
-
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DiscordConnection.plugin, DiscordConnection::setActivity);
     }
 }
 

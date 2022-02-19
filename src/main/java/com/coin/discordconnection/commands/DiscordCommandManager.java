@@ -2,6 +2,7 @@ package com.coin.discordconnection.commands;
 
 import com.coin.discordconnection.commands.subCommands.ActivityTextCommand;
 import com.coin.discordconnection.commands.subCommands.ChannelCommand;
+import com.coin.discordconnection.commands.subCommands.DeathCountTextCommand;
 import com.coin.discordconnection.commands.subCommands.TokenCommand;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class DiscordCommandManager extends CommandManager{
         subCommands.add(new TokenCommand());
         subCommands.add(new ActivityTextCommand());
         subCommands.add(new ChannelCommand());
+        subCommands.add(new DeathCountTextCommand());
         return subCommands;
     }
 
