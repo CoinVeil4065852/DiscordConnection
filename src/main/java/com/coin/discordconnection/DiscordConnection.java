@@ -131,7 +131,7 @@ class JDAListener extends ListenerAdapter {
             }
             TextComponent textComponent = new TextComponent();
             textComponent.setText(Helper.messageToText(event.getMessage()));
-            textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new Text("Reply")));
+            textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new Text("Click to Reply")));
             textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,"/reply "+event.getMessage().getId()+" "));
             Bukkit.getConsoleSender().sendMessage(Helper.messageToText(event.getMessage()));
             Bukkit.getOnlinePlayers().forEach(player -> player.spigot().sendMessage(textComponent));
@@ -171,6 +171,7 @@ class BukkitEvents implements Listener {
         int death = DiscordConnection.deathCount.getOrDefault(name, 0);
         DiscordConnection.deathCount.put(name, death + 1);
         DiscordConnection.saveDeathCount();
+        String deathMsg = event.getDeathMessage();
         event.setDeathMessage(event.getDeathMessage()+"\n"+Config.getInstance().getDeathCountText()+":"+ChatColor.RED + (death + 1));
 
         if(DiscordConnection.jda==null)return;
@@ -180,7 +181,7 @@ class BukkitEvents implements Listener {
         if (textChannel == null) return;
         EmbedBuilder builder = new EmbedBuilder();
 
-        builder.setTitle("*" + event.getDeathMessage() + "*\n"+Config.getInstance().getDeathCountText()+":" + (death + 1)).setColor(Color.RED);
+        builder.setTitle("*" + deathMsg + "*\n"+Config.getInstance().getDeathCountText()+":" + (death + 1)).setColor(Color.RED);
 
         textChannel.sendMessageEmbeds(builder.build()).queue();
     }

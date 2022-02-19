@@ -21,13 +21,14 @@ public class DeathCountTextCommand extends SubCommand {
             return;
         }
 
-            Config.getInstance().setDeathCountText(Arrays.toString(Arrays.copyOfRange(args,1,args.length)));
+            Config.getInstance().setDeathCountText(String.join(" ",args));
+        sender.sendMessage(ChatColor.GREEN + "DeathCount text had been set");
 
     }
 
     @Override
     public String getName() {
-        return "DeathCountText";
+        return "deathCountText";
     }
 
     @Override

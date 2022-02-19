@@ -16,6 +16,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+
 public class ReplyCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -35,16 +37,17 @@ public class ReplyCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "Incorrect id");
             return true;
         }
+        String msg = String.join(" ",(Arrays.copyOfRange(args,1,args.length)));
 
-        messageToReply.reply("<" + sender.getName() + "> " +args[1]).queue(message -> {
+        messageToReply.reply("<" + sender.getName() + "> " +msg).queue(message -> {
             String replyId = message.getId();
             TextComponent textComponent = new TextComponent();
-            textComponent.setText("<" + sender.getName() + "> " + args[1]);
+            textComponent.setText("<" + sender.getName() + "> " + msg);
             textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("Click to Reply")));
             textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/reply " + replyId + " "));
 
             Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GRAY + " ➡ Replied " + Helper.messageToText(messageToReply,ChatColor.GRAY));
-            Bukkit.getConsoleSender().sendMessage("<" + sender.getName() + "> " + args[1]);
+            Bukkit.getConsoleSender().sendMessage("<" + sender.getName() + "> " + msg);
 
             Bukkit.getOnlinePlayers().forEach(player -> player.sendMessage(ChatColor.DARK_GRAY + " ➡ Replied " + Helper.messageToText(messageToReply,ChatColor.GRAY)));
             Bukkit.getOnlinePlayers().forEach(player -> player.spigot().sendMessage(textComponent));
