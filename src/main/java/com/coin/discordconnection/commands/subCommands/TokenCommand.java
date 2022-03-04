@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import javax.security.auth.login.LoginException;
+import java.util.List;
 
 public class TokenCommand extends SubCommand {
 
@@ -21,7 +22,7 @@ public class TokenCommand extends SubCommand {
         }
         try {
             DiscordConnection.startJDA(args[0]);
-            sender.sendMessage(ChatColor.GREEN + "token had been set, use /dcchannel [channelId] to set channel");
+            sender.sendMessage(ChatColor.GREEN + "token had been set, use /discord channel <channel> set <id> to set channel");
             Config.getInstance().setToken(args[0]);
         } catch (LoginException e) {
             sender.sendMessage(ChatColor.RED + "token incorrect");
@@ -42,4 +43,6 @@ public class TokenCommand extends SubCommand {
     public String getUsage() {
         return "/discord token <token>";
     }
+
+
 }

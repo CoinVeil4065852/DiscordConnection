@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.security.auth.login.LoginException;
 import java.util.Arrays;
+import java.util.List;
 
 public class DeathCountTextCommand extends SubCommand {
 
@@ -40,4 +41,6 @@ public class DeathCountTextCommand extends SubCommand {
     public String getUsage() {
         return "/discord deathcounttext <text>";
     }
+
+
 }

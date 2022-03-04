@@ -21,13 +21,13 @@ import java.util.Arrays;
 public class ReplyCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (DiscordConnection.jda == null || Config.getInstance().getChannelId() == null || Config.getInstance().getChannelId().isEmpty()) {
+        if (DiscordConnection.jda == null || Config.getInstance().getChatChannelId() == null || Config.getInstance().getChatChannelId().isEmpty()) {
             sender.sendMessage(ChatColor.RED + "Discord bot hasn't been connected properly");
             return true;
         }
         if (args.length < 2) return false;
 
-        TextChannel textChannel = DiscordConnection.jda.getTextChannelById(Config.getInstance().getChannelId());
+        TextChannel textChannel = DiscordConnection.jda.getTextChannelById(Config.getInstance().getChatChannelId());
         if (textChannel == null) {
             sender.sendMessage(ChatColor.RED + "Discord bot hasn't been set properly");
             return true;

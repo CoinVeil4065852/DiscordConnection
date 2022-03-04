@@ -1,47 +1,74 @@
 package com.coin.discordconnection;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 public class Config {
     private static final File CONFIG = new File("./plugins/discordPlugin.config");
-    private String channelId;
+    private String chatChannelId;
+    private String achievementChannelId;
+    private String consoleChannelId;
+
+
+    private String deathMessageChannelId;
     private String token;
-    private String activityText ="server is opening";
-    private String deathCountText ="Deaths";
+    private String activityText = "server is opening";
+    private String deathCountText = "Deaths";
 
     private static Config instance;
 
-    public Config(String channelId, String token, String activityText) {
-        this.channelId = channelId;
-        this.token = token;
-        this.activityText = activityText;
+    public String getDeathMessageChannelId() {
+        return deathMessageChannelId;
     }
-    public Config(){
+
+    public void setDeathMessageChannelId(String deathMessageChannelId) {
+        this.deathMessageChannelId = deathMessageChannelId;
+        saveConfig();
+    }
+    public String getAchievementChannelId() {
+        return achievementChannelId;
+    }
+
+    public void setAchievementChannelId(String achievementChannelId) {
+        this.achievementChannelId = achievementChannelId;
+        saveConfig();
+    }
+
+    public String getConsoleChannelId() {
+        return consoleChannelId;
+    }
+
+    public void setConsoleChannelId(String consoleChannelId) {
+        this.consoleChannelId = consoleChannelId;
+        saveConfig();
+    }
+
+
+
+    public Config() {
     }
 
     public static Config getInstance() {
-        ObjectMapper mapper = new ObjectMapper();
-        if(instance==null){
+
+        if (instance == null) {
             try {
-                instance=mapper.readValue(CONFIG,Config.class);
+                ObjectMapper mapper = new ObjectMapper();
+                instance = mapper.readValue(CONFIG, Config.class);
             } catch (IOException e) {
-                instance=new Config();
+                instance = new Config();
             }
         }
         return instance;
     }
 
-    public String getChannelId() {
-        return channelId;
+    public String getChatChannelId() {
+        return chatChannelId;
     }
 
-    public void setChannelId(String channelId) {
-        this.channelId = channelId;
+    public void setChatChannelId(String chatChannelId) {
+        this.chatChannelId = chatChannelId;
         saveConfig();
     }
 
@@ -72,11 +99,11 @@ public class Config {
         saveConfig();
     }
 
-    private void saveConfig(){
+    private void saveConfig() {
         try {
             ObjectMapper mapper = new ObjectMapper();
 
-            mapper.writeValue(CONFIG,this);
+            mapper.writeValue(CONFIG, this);
 
         } catch (IOException e) {
             e.printStackTrace();

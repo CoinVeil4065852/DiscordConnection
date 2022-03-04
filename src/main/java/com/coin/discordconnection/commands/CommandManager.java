@@ -45,14 +45,16 @@ public abstract class CommandManager implements CommandExecutor {
 
     }
     public TabCompleter getTabCompleter(){
+        List<String> strings = new ArrayList<>();
+        for (SubCommand subCommand:getSubCommands()) {
+            strings.add(subCommand.getName());
+        }
         return (sender, command, alias, args) -> {
             if(args.length==1) {
-                List<String> strings = new ArrayList<>();
-                for (SubCommand subCommand:new DiscordCommandManager().getSubCommands()) {
-                    strings.add(subCommand.getName());
-                }
+
                 return strings;
             }
+
             return null;
         };
     }

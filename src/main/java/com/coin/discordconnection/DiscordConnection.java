@@ -16,10 +16,13 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandException;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -42,7 +45,7 @@ public class DiscordConnection extends JavaPlugin {
     public void onEnable() {
         plugin = this;
         getServer().getPluginManager().registerEvents(new BukkitEvents(), this);
-        DiscordCommandManager discordCommandManager =new DiscordCommandManager();
+        DiscordCommandManager discordCommandManager = new DiscordCommandManager();
         getCommand("discord").setExecutor(discordCommandManager);
         getCommand("discord").setTabCompleter(discordCommandManager.getTabCompleter());
         getCommand("reply").setExecutor(new ReplyCommand());
@@ -54,7 +57,8 @@ public class DiscordConnection extends JavaPlugin {
                 deathCount.put(args[0], Integer.parseInt(args[1]));
                 line = deathCountBR.readLine();
             }
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
 
         String token = Config.getInstance().getToken();
         if (token != null && !token.isEmpty()) {
@@ -112,34 +116,49 @@ public class DiscordConnection extends JavaPlugin {
 class JDAListener extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-        if (!event.getChannel().getId().equals(Config.getInstance().getChannelId())) return;
-        if (event.getAuthor().getIdLong() == event.getJDA().getSelfUser().getIdLong()) return;
-        if (event.getMessage().getContentRaw().equalsIgnoreCase("-ip")) {
-            String ip = Helper.getPublicIp();
-            if (ip != null) {
-                event.getChannel().sendMessageEmbeds(new EmbedBuilder().setColor(Color.GREEN).setTitle(ip).build()).queue();
-            } else {
-                event.getChannel().sendMessageEmbeds(new EmbedBuilder().setColor(Color.RED).setTitle("ERROR").addField("can't get server's ip", "", true).build()).queue();
-            }
-            return;
-        }
-        if (!event.getMessage().getContentRaw().isEmpty()) {
-            Message repliedMessage = event.getMessage().getReferencedMessage();
 
-            if (repliedMessage != null) {
-                Bukkit.getServer().broadcastMessage(ChatColor.DARK_GRAY + " ➡ Replied " + Helper.messageToText(repliedMessage,ChatColor.GRAY));
+        if (event.getAuthor().getIdLong() == event.getJDA().getSelfUser().getIdLong()) return;
+        if (event.getChannel().getId().equals(Config.getInstance().getChatChannelId())) {
+            if (event.getMessage().getContentRaw().equalsIgnoreCase("-ip")) {
+                String ip = Helper.getPublicIp();
+                if (ip != null) {
+                    event.getChannel().sendMessageEmbeds(new EmbedBuilder().setColor(Color.GREEN).setTitle(ip).build()).queue();
+                } else {
+                    event.getChannel().sendMessageEmbeds(new EmbedBuilder().setColor(Color.RED).setTitle("ERROR").addField("can't get server's ip", "", true).build()).queue();
+                }
+                return;
             }
-            TextComponent textComponent = new net.md_5.bungee.api.chat.TextComponent();
-            textComponent.setText(Helper.messageToText(event.getMessage()));
-            textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{new TextComponent("Click to Reply")}));
-            textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,"/reply "+event.getMessage().getId()+" "));
-            Bukkit.getConsoleSender().sendMessage(Helper.messageToText(event.getMessage()));
-            Bukkit.getOnlinePlayers().forEach(player -> player.spigot().sendMessage(textComponent));
+            if (!event.getMessage().getContentRaw().isEmpty()) {
+                Message repliedMessage = event.getMessage().getReferencedMessage();
+
+                if (repliedMessage != null) {
+                    Bukkit.getServer().broadcastMessage(ChatColor.DARK_GRAY + " ➡ Replied " + Helper.messageToText(repliedMessage, ChatColor.GRAY));
+                }
+                TextComponent textComponent = new net.md_5.bungee.api.chat.TextComponent();
+                textComponent.setText(Helper.messageToText(event.getMessage()));
+                textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{new TextComponent("Click to Reply")}));
+                textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/reply " + event.getMessage().getId() + " "));
+                Bukkit.getConsoleSender().sendMessage(Helper.messageToText(event.getMessage()));
+                Bukkit.getOnlinePlayers().forEach(player -> player.spigot().sendMessage(textComponent));
+
+            }
+        }
+        if (event.getChannel().getId().equals(Config.getInstance().getConsoleChannelId())) {
+            String command = event.getMessage().getContentRaw().replaceFirst("/", "");
+
+            Bukkit.getScheduler().callSyncMethod(DiscordConnection.plugin, () -> {
+                try {
+                    if (Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), command))
+                        Bukkit.getServer().broadcastMessage(ChatColor.YELLOW+event.getAuthor().getName()+ChatColor.RESET+" had executed "+ChatColor.DARK_AQUA+"/"+command);
+                } catch (CommandException ignored) {
+
+                }
+                return null;
+            });
+
 
         }
     }
-
-
 
 
 }
@@ -147,19 +166,19 @@ class JDAListener extends ListenerAdapter {
 class BukkitEvents implements Listener {
     @EventHandler
     public static void onPlayerChat(AsyncPlayerChatEvent event) {
-        if(DiscordConnection.jda==null)return;
-        String channelID = Config.getInstance().getChannelId();
+        if (DiscordConnection.jda == null) return;
+        String channelID = Config.getInstance().getChatChannelId();
         if (channelID == null || channelID.isEmpty()) return;
         TextChannel textChannel = DiscordConnection.jda.getTextChannelById(channelID);
         if (textChannel == null) return;
         event.setCancelled(true);
-        textChannel.sendMessage("*<" + event.getPlayer().getName() + ">* " + event.getMessage()).queue((message)-> {
+        textChannel.sendMessage("*<" + event.getPlayer().getName() + ">* " + event.getMessage()).queue((message) -> {
             String replyId = message.getId();
             net.md_5.bungee.api.chat.TextComponent textComponent = new net.md_5.bungee.api.chat.TextComponent();
-            textComponent.setText("<"+event.getPlayer().getName()+"> "+event.getMessage());
+            textComponent.setText("<" + event.getPlayer().getName() + "> " + event.getMessage());
             textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{new TextComponent("Reply")}));
-            textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,"/reply "+replyId+" "));
-            Bukkit.getConsoleSender().sendMessage("<"+event.getPlayer().getName()+"> "+event.getMessage());
+            textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/reply " + replyId + " "));
+            Bukkit.getConsoleSender().sendMessage("<" + event.getPlayer().getName() + "> " + event.getMessage());
             Bukkit.getOnlinePlayers().forEach(player -> player.spigot().sendMessage(textComponent));
         });
     }
@@ -172,18 +191,33 @@ class BukkitEvents implements Listener {
         DiscordConnection.deathCount.put(name, death + 1);
         DiscordConnection.saveDeathCount();
         String deathMsg = event.getDeathMessage();
-        event.setDeathMessage(event.getDeathMessage()+"\n"+Config.getInstance().getDeathCountText()+":"+ChatColor.RED + (death + 1));
+        event.setDeathMessage(event.getDeathMessage() + "\n" + Config.getInstance().getDeathCountText() + ":" + ChatColor.RED + (death + 1));
 
-        if(DiscordConnection.jda==null)return;
-        String channelID = Config.getInstance().getChannelId();
+        if (DiscordConnection.jda == null) return;
+        String channelID = Config.getInstance().getDeathMessageChannelId();
         if (channelID == null || channelID.isEmpty()) return;
         TextChannel textChannel = DiscordConnection.jda.getTextChannelById(channelID);
         if (textChannel == null) return;
         EmbedBuilder builder = new EmbedBuilder();
 
-        builder.setTitle("*" + deathMsg + "*\n"+Config.getInstance().getDeathCountText()+":" + (death + 1)).setColor(Color.RED);
+        builder.setTitle("*" + deathMsg + "*\n" + Config.getInstance().getDeathCountText() + ":" + (death + 1)).setColor(Color.RED);
 
         textChannel.sendMessageEmbeds(builder.build()).queue();
+    }
+
+    @EventHandler
+    public static void onPlayerAdvancementDone(PlayerAdvancementDoneEvent event) {
+        if (DiscordConnection.jda == null) return;
+        String channelID = Config.getInstance().getAchievementChannelId();
+        if (channelID == null || channelID.isEmpty()) return;
+        TextChannel textChannel = DiscordConnection.jda.getTextChannelById(channelID);
+        if (textChannel == null) return;
+        EmbedBuilder builder = new EmbedBuilder();
+
+        builder.setTitle("*" + event.getPlayer().getName() + "* has made the advancement [" + event.getAdvancement().getKey().getKey().split("/")[event.getAdvancement().getKey().getKey().split("/").length - 1].replace("_", " ") + "]").setColor(Color.GREEN);
+
+        textChannel.sendMessageEmbeds(builder.build()).queue();
+
     }
 
     @EventHandler

@@ -8,6 +8,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class ActivityTextCommand extends SubCommand {
     @Override
     public void execute(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -34,4 +36,6 @@ public class ActivityTextCommand extends SubCommand {
     public String getUsage() {
         return "/discord activitytext <text>";
     }
+
+
 }
