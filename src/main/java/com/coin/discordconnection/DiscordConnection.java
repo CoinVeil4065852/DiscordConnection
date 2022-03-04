@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.chat.hover.content.Text;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -129,9 +129,9 @@ class JDAListener extends ListenerAdapter {
             if (repliedMessage != null) {
                 Bukkit.getServer().broadcastMessage(ChatColor.DARK_GRAY + " ➡ Replied " + Helper.messageToText(repliedMessage,ChatColor.GRAY));
             }
-            TextComponent textComponent = new TextComponent();
+            TextComponent textComponent = new net.md_5.bungee.api.chat.TextComponent();
             textComponent.setText(Helper.messageToText(event.getMessage()));
-            textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new Text("Click to Reply")));
+            textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{new TextComponent("Click to Reply")}));
             textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,"/reply "+event.getMessage().getId()+" "));
             Bukkit.getConsoleSender().sendMessage(Helper.messageToText(event.getMessage()));
             Bukkit.getOnlinePlayers().forEach(player -> player.spigot().sendMessage(textComponent));
@@ -155,9 +155,9 @@ class BukkitEvents implements Listener {
         event.setCancelled(true);
         textChannel.sendMessage("*<" + event.getPlayer().getName() + ">* " + event.getMessage()).queue((message)-> {
             String replyId = message.getId();
-            TextComponent textComponent = new TextComponent();
+            net.md_5.bungee.api.chat.TextComponent textComponent = new net.md_5.bungee.api.chat.TextComponent();
             textComponent.setText("<"+event.getPlayer().getName()+"> "+event.getMessage());
-            textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new Text("Reply")));
+            textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{new TextComponent("Reply")}));
             textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,"/reply "+replyId+" "));
             Bukkit.getConsoleSender().sendMessage("<"+event.getPlayer().getName()+"> "+event.getMessage());
             Bukkit.getOnlinePlayers().forEach(player -> player.spigot().sendMessage(textComponent));

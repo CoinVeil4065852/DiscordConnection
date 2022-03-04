@@ -1,7 +1,7 @@
 name: DiscordConnection
 version: '${project.version}'
 main: com.coin.discordconnection.DiscordConnection
-api-version: 1.18
+api-version: 1.13
 authors: [ Ryan_Tang ]
 description: A Spigot plugin that connect discord bot with minecraft
 commands:
@@ -11,13 +11,3 @@ commands:
   reply:
     description: reply to message
     usage: /<command> <messageid> <content>
-
-#  discord token:
-#    description: set the bot's token
-#    usage: /<command> <token>
-#  discord channel:
-#    description: set the channel id
-#    usage: /<command> <channelId>
-#  discord activitytext:
-#    description: set the activity text
-#    usage: /<command> <text>

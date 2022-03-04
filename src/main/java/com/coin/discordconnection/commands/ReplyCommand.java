@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.chat.hover.content.Text;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -43,7 +43,7 @@ public class ReplyCommand implements CommandExecutor {
             String replyId = message.getId();
             TextComponent textComponent = new TextComponent();
             textComponent.setText("<" + sender.getName() + "> " + msg);
-            textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("Click to Reply")));
+            textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{new TextComponent("Click to Reply")}));
             textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/reply " + replyId + " "));
 
             Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GRAY + " ➡ Replied " + Helper.messageToText(messageToReply,ChatColor.GRAY));
