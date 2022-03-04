@@ -6,6 +6,8 @@ A Spigot plugin that connect Discord bot with Minecraft server
 * Broadcast death message + death count
 * Broadcast advancement message
 * Execute Minecraft command from Discord channel
+* Get server ip by command in Discord channel
+* Display playercount on activity status
 # How to Use
 ### Create a Discord Bot and Add it to Your Discord Server
 1. Go to https://discord.com/developers/applications
@@ -33,3 +35,20 @@ A Spigot plugin that connect Discord bot with Minecraft server
    - `console`:use for execute minecraft command from discord
    - `all`:set all the channels 
 6. if you want to clear any channel just use `/discord channel <channel> clear`
+
+
+# Commands 
+## minecraft
+
+### for everyone:
+- `/reply <messageid> <text>` -- reply to the message
+
+### op required:
+- `/discord token <token>` -- set the bot's token
+- `/discord channel <channel> <method> (<id>)` -- set the Discord channel connected to the bot
+- `/discord activitytext <text>` -- set the text you want to display on the bot's activity status
+- `/discord deathcounttext <text>` -- set the DeathCount display text that shows when a player died
+
+## Discord
+
+- `-ip` -- get Minecraft server's public ip
