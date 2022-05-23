@@ -13,7 +13,7 @@ A Spigot plugin that connects Discord bot with Minecraft server
 ### For Players
 * Chat in Minecraft, and your message will be sent to Discord
 * If you want to reply to a message, just click on it 
-* In Discord Channel, you can type `-ip` to get the server IP
+* In Discord Channel, you can type `-ip` to get the server IP `-list` to get online players
 ### For Administrator 
 * Setup the plugin by the installation below
 * type any commands in the console channel to execute it in Minecraft server
