@@ -51,6 +51,7 @@ A Spigot plugin that connects Discord bot with Minecraft server
 
 ### for everyone:
 - `/reply <messageid> <text>` -- reply to the message
+- `/mention <userid> (<text>)` -- mention a user 
 
 ### op required:
 - `/discord token <token>` -- set the bot's token
@@ -61,3 +62,4 @@ A Spigot plugin that connects Discord bot with Minecraft server
 ## Discord
 
 - `-ip` -- get Minecraft server's public ip
+- `-list` -- get online players 
