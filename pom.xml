@@ -6,7 +6,7 @@
 
     <groupId>com.coin</groupId>
     <artifactId>discordConnection</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
 
     <name>DiscordConnection</name>
@@ -16,7 +16,7 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-            <jackson.version>2.13.1</jackson.version>
+        <jackson.version>2.13.1</jackson.version>
 
 
     </properties>
@@ -31,6 +31,7 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>
+
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

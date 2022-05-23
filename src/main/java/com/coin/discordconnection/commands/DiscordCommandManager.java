@@ -2,7 +2,6 @@ package com.coin.discordconnection.commands;
 
 import com.coin.discordconnection.commands.subCommands.ActivityTextCommand;
 import com.coin.discordconnection.commands.subCommands.ChannelCommand;
-import com.coin.discordconnection.commands.subCommands.DeathCountTextCommand;
 import com.coin.discordconnection.commands.subCommands.TokenCommand;
 import org.bukkit.command.TabCompleter;
 
@@ -17,7 +16,6 @@ public class DiscordCommandManager extends CommandManager{
         subCommands.add(new TokenCommand());
         subCommands.add(new ActivityTextCommand());
         subCommands.add(new ChannelCommand());
-        subCommands.add(new DeathCountTextCommand());
         return subCommands;
     }
 
@@ -35,11 +33,11 @@ public class DiscordCommandManager extends CommandManager{
             if(args[0].equalsIgnoreCase("channel")){
                 if(args.length==2){
                     List<String> subCommands = new ArrayList<>();
-                    subCommands.add("chat");
-                    subCommands.add("console");
-                    subCommands.add("achievement");
-                    subCommands.add("death");
-                    subCommands.add("all");
+                    subCommands.add(ChannelType.CONSOLE);
+                    subCommands.add(ChannelType.ADVANCEMENT);
+                    subCommands.add(ChannelType.CHAT);
+                    subCommands.add(ChannelType.DEATH);
+                    subCommands.add(ChannelType.ALL);
 
                     return subCommands;
                 }
@@ -47,8 +45,6 @@ public class DiscordCommandManager extends CommandManager{
                     List<String> subCommands = new ArrayList<>();
                     subCommands.add("clear");
                     subCommands.add("set");
-
-
                     return subCommands;
                 }
 

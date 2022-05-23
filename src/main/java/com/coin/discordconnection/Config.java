@@ -8,32 +8,30 @@ import java.io.IOException;
 public class Config {
     private static final File CONFIG = new File("./plugins/discordPlugin.config");
     private String chatChannelId;
-    private String achievementChannelId;
+    private String advancementChannelId;
     private String consoleChannelId;
 
-
-    private String deathMessageChannelId;
+    private String deathChannelId;
     private String token;
     private String activityText = "server is opening";
-    private String deathCountText = "Deaths";
 
     private static Config instance;
 
-    public String getDeathMessageChannelId() {
-        return deathMessageChannelId;
+    public String getDeathChannelId() {
+        return deathChannelId;
     }
 
-    public void setDeathMessageChannelId(String deathMessageChannelId) {
-        this.deathMessageChannelId = deathMessageChannelId;
-        saveConfig();
+    public void setDeathChannelId(String deathChannelId) {
+        this.deathChannelId = deathChannelId;
+        save();
     }
-    public String getAchievementChannelId() {
-        return achievementChannelId;
+    public String getAdvancementChannelId() {
+        return advancementChannelId;
     }
 
-    public void setAchievementChannelId(String achievementChannelId) {
-        this.achievementChannelId = achievementChannelId;
-        saveConfig();
+    public void setAdvancementChannelId(String advancementChannelId) {
+        this.advancementChannelId = advancementChannelId;
+        save();
     }
 
     public String getConsoleChannelId() {
@@ -42,7 +40,7 @@ public class Config {
 
     public void setConsoleChannelId(String consoleChannelId) {
         this.consoleChannelId = consoleChannelId;
-        saveConfig();
+        save();
     }
 
 
@@ -58,6 +56,7 @@ public class Config {
                 instance = mapper.readValue(CONFIG, Config.class);
             } catch (IOException e) {
                 instance = new Config();
+                instance.save();
             }
         }
         return instance;
@@ -69,25 +68,15 @@ public class Config {
 
     public void setChatChannelId(String chatChannelId) {
         this.chatChannelId = chatChannelId;
-        saveConfig();
+        save();
     }
-
-    public String getDeathCountText() {
-        return deathCountText;
-    }
-
-    public void setDeathCountText(String deathCountText) {
-        this.deathCountText = deathCountText;
-        saveConfig();
-    }
-
     public String getToken() {
         return token;
     }
 
     public void setToken(String token) {
         this.token = token;
-        saveConfig();
+        save();
     }
 
     public String getActivityText() {
@@ -96,10 +85,10 @@ public class Config {
 
     public void setActivityText(String activityText) {
         this.activityText = activityText;
-        saveConfig();
+        save();
     }
 
-    private void saveConfig() {
+    private void save() {
         try {
             ObjectMapper mapper = new ObjectMapper();
 

@@ -19,7 +19,7 @@ public abstract class CommandManager implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!sender.isOp()) {
-            sender.sendMessage(ChatColor.RED + "Permission denied");
+            sender.sendMessage(ChatColor.RED + "No Permission");
             return true;
         }
         if (args.length == 0) {

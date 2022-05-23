@@ -11,3 +11,6 @@ commands:
   reply:
     description: reply to message
     usage: /<command> <messageid> <content>
+  mention:
+    description: mention
+    usage: /<command> <userid> <content>
